@@ -2,6 +2,8 @@ package com.MBEMNOVA.PULSEHR.service.impl;
 
 import com.MBEMNOVA.PULSEHR.dto.ContratDTO;
 import com.MBEMNOVA.PULSEHR.entity.Contrat;
+import com.MBEMNOVA.PULSEHR.entity.TypeContrat;
+import com.MBEMNOVA.PULSEHR.exception.EntityNotFoundException;
 import com.MBEMNOVA.PULSEHR.repository.ContratRepository;
 import com.MBEMNOVA.PULSEHR.service.ContratService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class ContratServiceImpl implements ContratService {
     private final ContratRepository contratRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ContratDTO> getContratsActifs() {
         return contratRepository.findByActifTrue()
                 .stream()
@@ -38,7 +41,7 @@ public class ContratServiceImpl implements ContratService {
     @Override
     public ContratDTO signerContrat(Long id) {
         Contrat contrat = contratRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Contrat introuvable avec l'ID : " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Contrat introuvable avec l'ID : " + id));
 
         contrat.setEstSigne(true);
         contrat.setDateSignature(LocalDate.now());
@@ -50,9 +53,13 @@ public class ContratServiceImpl implements ContratService {
     @Override
     public ContratDTO modifierContrat(Long id, ContratDTO contratDTO) {
         Contrat contratExistant = contratRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Contrat introuvable avec l'ID : " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Contrat introuvable avec l'ID : " + id));
 
-        contratExistant.setTypeContrat(contratDTO.getTypeContrat());
+        // Conversion String (DTO) -> Enum (Entity)
+        if (contratDTO.getTypeContrat() != null) {
+            contratExistant.setTypeContrat(TypeContrat.valueOf(contratDTO.getTypeContrat().toUpperCase()));
+        }
+
         contratExistant.setSalaire(contratDTO.getSalaire());
         contratExistant.setDateDebut(contratDTO.getDateDebut());
         contratExistant.setDateFin(contratDTO.getDateFin());
@@ -67,7 +74,8 @@ public class ContratServiceImpl implements ContratService {
         if (entity == null) return null;
         return ContratDTO.builder()
                 .id(entity.getId())
-                .typeContrat(entity.getTypeContrat())
+                // Conversion Enum (Entity) -> String (DTO)
+                .typeContrat(entity.getTypeContrat() != null ? entity.getTypeContrat().name() : null)
                 .salaire(entity.getSalaire())
                 .dateDebut(entity.getDateDebut())
                 .dateFin(entity.getDateFin())
@@ -81,7 +89,8 @@ public class ContratServiceImpl implements ContratService {
         if (dto == null) return null;
         return Contrat.builder()
                 .id(dto.getId())
-                .typeContrat(dto.getTypeContrat())
+                // Conversion String (DTO) -> Enum (Entity)
+                .typeContrat(dto.getTypeContrat() != null ? TypeContrat.valueOf(dto.getTypeContrat().toUpperCase()) : null)
                 .salaire(dto.getSalaire())
                 .dateDebut(dto.getDateDebut())
                 .dateFin(dto.getDateFin())

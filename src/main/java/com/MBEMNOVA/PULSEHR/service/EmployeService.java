@@ -2,8 +2,6 @@ package com.MBEMNOVA.PULSEHR.service;
 
 import com.MBEMNOVA.PULSEHR.dto.*;
 import com.MBEMNOVA.PULSEHR.entity.*;
-// Importer l'enum explicitement si elle se trouve dans un sous-package dédié :
-// import com.MBEMNOVA.PULSEHR.entity.enums.StatutContrat;
 import com.MBEMNOVA.PULSEHR.exception.DuplicateEmailException;
 import com.MBEMNOVA.PULSEHR.exception.EntityNotFoundException;
 import com.MBEMNOVA.PULSEHR.repository.DepartementRepository;
@@ -65,14 +63,17 @@ public class EmployeService {
     }
 
     public EmployeAfficherDTO toAfficherDTO(Employe e) {
-        // Sécurisation contre les listes de contrats nulles
         List<Contrat> contrats = Optional.ofNullable(e.getContrats()).orElse(Collections.emptyList());
 
-        // Filtrage du contrat actif :
-        // Adapter la condition selon le type de 'actif' (Boolean) ou 'statut' (Enum) dans Contrat
+        // Extraction explicite en String pour éviter les conflits d'inférence Generics / Object
         String statutActif = contrats.stream()
-                .filter(c -> Boolean.TRUE.equals(c.getActif())) // Utilise getActif() si le champ dans Contrat est un Boolean
-                .map(c -> c.getTypeContrat() != null ? c.getTypeContrat() : "N/A") // Pas de .name() si typeContrat est déjà une String
+                .filter(c -> Boolean.TRUE.equals(c.getActif()))
+                .map(c -> {
+                    if (c.getTypeContrat() == null) {
+                        return "N/A";
+                    }
+                    return c.getTypeContrat().name();
+                })
                 .findFirst()
                 .orElse("AUCUN");
 
