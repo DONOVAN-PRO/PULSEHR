@@ -2,6 +2,8 @@ package com.MBEMNOVA.PULSEHR.service;
 
 import com.MBEMNOVA.PULSEHR.dto.*;
 import com.MBEMNOVA.PULSEHR.entity.*;
+// Importer l'enum explicitement si elle se trouve dans un sous-package dédié :
+// import com.MBEMNOVA.PULSEHR.entity.enums.StatutContrat;
 import com.MBEMNOVA.PULSEHR.exception.DuplicateEmailException;
 import com.MBEMNOVA.PULSEHR.exception.EntityNotFoundException;
 import com.MBEMNOVA.PULSEHR.repository.DepartementRepository;
@@ -10,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -61,10 +65,16 @@ public class EmployeService {
     }
 
     public EmployeAfficherDTO toAfficherDTO(Employe e) {
-        String statutActif = e.getContrats().stream()
-                .filter(c -> c.getStatut() == StatutContrat.ACTIF)
-                .map(c -> c.getTypeContrat().name())
-                .findFirst().orElse("AUCUN");
+        // Sécurisation contre les listes de contrats nulles
+        List<Contrat> contrats = Optional.ofNullable(e.getContrats()).orElse(Collections.emptyList());
+
+        // Filtrage du contrat actif :
+        // Adapter la condition selon le type de 'actif' (Boolean) ou 'statut' (Enum) dans Contrat
+        String statutActif = contrats.stream()
+                .filter(c -> Boolean.TRUE.equals(c.getActif())) // Utilise getActif() si le champ dans Contrat est un Boolean
+                .map(c -> c.getTypeContrat() != null ? c.getTypeContrat() : "N/A") // Pas de .name() si typeContrat est déjà une String
+                .findFirst()
+                .orElse("AUCUN");
 
         return EmployeAfficherDTO.builder()
                 .id(e.getId())

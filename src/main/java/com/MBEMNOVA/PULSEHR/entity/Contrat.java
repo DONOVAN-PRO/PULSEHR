@@ -17,12 +17,15 @@ public class Contrat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String typeContrat; // ex: CDI, CDD, Stage
+    private String typeContrat;
     private Double salaire;
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private LocalDate dateSignature;
 
+    @Builder.Default
     private Boolean estSigne = false;
+
+    @Builder.Default
     private Boolean actif = true;
 }
