@@ -18,10 +18,10 @@ public class Contrat {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private TypeContrat typeContrat; // Modifié de String -> TypeContrat
+    private TypeContrat typeContrat;
 
     @Enumerated(EnumType.STRING)
-    private StatutContrat statut; // Ajouté pour correspondre au statut (ACTIF, EXPIRE, etc.)
+    private StatutContrat statut;
 
     private Double salaire;
     private LocalDate dateDebut;
@@ -33,4 +33,9 @@ public class Contrat {
 
     @Builder.Default
     private Boolean actif = true;
+
+    // --- Champ manquant causant l'erreur ---
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employe_id")
+    private Employe employe;
 }
