@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouveau Contrat - PulseHR</title>
+</head>
+<body>
+<h1>Créer un nouveau contrat</h1>
+
+<form th:action="@{/contrats}" th:object="${contrat}" method="post">
+    <div>
+        <label for="typeContrat">Type de contrat :</label>
+        <select id="typeContrat" th:field="*{typeContrat}" required>
+            <option value="CDI">CDI</option>
+            <option value="CDD">CDD</option>
+            <option value="Stage">Stage</option>
+            <option value="Alternance">Alternance</option>
+        </select>
+    </div>
+    <br>
+    <div>
+        <label for="salaire">Salaire mensuel :</label>
+        <input type="number" id="salaire" step="0.01" th:field="*{salaire}" required />
+    </div>
+    <br>
+    <div>
+        <label for="dateDebut">Date de début :</label>
+        <input type="date" id="dateDebut" th:field="*{dateDebut}" required />
+    </div>
+    <br>
+    <div>
+        <label for="dateFin">Date de fin (optionnel) :</label>
+        <input type="date" id="dateFin" th:field="*{dateFin}" />
+    </div>
+    <br>
+    <button type="submit">Enregistrer le contrat</button>
+    <a th:href="@{/contrats}">Annuler</a>
+</form>
+</body>
+</html>
