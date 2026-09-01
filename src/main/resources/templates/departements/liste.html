@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Départements — PulseHR</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+            color: #1a1a1a;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #0a0a0a;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 4px;
+            border: 1.5px solid #0a0a0a;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Message d'alerte */
+        .alert {
+            padding: 10px;
+            background: #fef2f2;
+            border-left: 4px solid #b91c1c;
+            color: #b91c1c;
+            margin-bottom: 1rem;
+            border-radius: 2px;
+        }
+
+        /* Bouton Ajouter */
+        .btn-add {
+            display: inline-block;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-add:hover {
+            background-color: #333333;
+        }
+
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #0a0a0a;
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        td a {
+            color: #0a0a0a;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        td a:hover {
+            color: #444444;
+        }
+
+        /* Bouton Supprimer spécifique aux lignes du tableau */
+        .btn-danger {
+            background-color: #b91c1c;
+            color: #ffffff;
+            border: none;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-danger:hover {
+            background-color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div th:replace="~{layout :: nav}"></div>
+</header>
+
+<div class="container">
+    <h2>Départements</h2>
+    <div th:if="${errorMessage}" class="alert" th:text="${errorMessage}"></div>
+    <a th:href="@{/departements/nouveau}" class="btn-add">+ Créer Département</a>
+
+    <div th:if="${#lists.isEmpty(departements)}">
+        <p>Aucun département trouvé. Créez-en un pour commencer !</p>
+    </div>
+
+    <table th:if="${!#lists.isEmpty(departements)}">
+        <thead>
+        <tr><th>Nom</th><th>Budget Annuel</th><th>Localisation</th><th>Employés</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${departements}">
+            <td><a th:href="@{/departements/{id}(id=${d.id})}" th:text="${d.nom}"></a></td>
+            <td th:text="${d.budgetAnnuel}"></td>
+            <td th:text="${d.localisation}"></td>
+            <td th:text="${d.nombreEmployes}"></td>
+            <td>
+                <form th:action="@{/departements/{id}/supprimer(id=${d.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-danger">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

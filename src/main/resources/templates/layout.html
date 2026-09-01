@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PulseHR</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+            color: #1a1a1a;
+        }
+
+        header {
+            background: #0a0a0a;
+            width: 100%;
+        }
+
+        nav {
+            background: #0a0a0a;
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 4px;
+            border: 1.5px solid #0a0a0a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #0a0a0a;
+            color: white;
+        }
+
+        .alert {
+            padding: 10px;
+            background: #fef2f2;
+            border-left: 4px solid #b91c1c;
+            color: #b91c1c;
+            margin-bottom: 1rem;
+        }
+
+        .warn-expiring {
+            background: #fffbeb;
+            font-weight: bold;
+            color: #92400e;
+        }
+
+        .field-error {
+            color: #b91c1c;
+            font-size: 0.85em;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<header th:fragment="nav">
+    <nav>
+        <a th:href="@{/}">Tableau de Bord</a>
+        <a th:href="@{/departements}">Départements</a>
+        <a th:href="@{/employes}">Employés</a>
+        <a th:href="@{/contrats}">Contrats</a>
+        <a th:href="@{/evaluations/nouveau}">Nouvelle Évaluation</a>
+        <a th:href="@{/swagger-ui.html}" target="_blank">API Swagger</a>
+    </nav>
+</header>
+</body>
+</html>

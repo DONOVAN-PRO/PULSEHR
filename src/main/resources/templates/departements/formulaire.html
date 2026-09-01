@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulaire Département — PulseHR</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+            color: #1a1a1a;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #0a0a0a;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 4px;
+            border: 1.5px solid #0a0a0a;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Formulaires */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            max-width: 600px;
+        }
+
+        form div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0a0a0a;
+        }
+
+        button[type="submit"] {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #333333;
+        }
+
+        /* Messages d'erreur de validation */
+        .field-error {
+            color: #b91c1c;
+            font-size: 0.85em;
+            display: block;
+            margin-top: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div th:replace="~{layout :: nav}"></div>
+</header>
+
+<div class="container">
+    <h2>Créer / Modifier un Département</h2>
+    <form th:action="@{/departements}" th:object="${departement}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div>
+            <label>Nom :</label>
+            <input type="text" th:field="*{nom}" />
+            <span class="field-error" th:errors="*{nom}"></span>
+        </div>
+        <div>
+            <label>Budget Annuel :</label>
+            <input type="number" step="0.01" th:field="*{budgetAnnuel}" />
+            <span class="field-error" th:errors="*{budgetAnnuel}"></span>
+        </div>
+        <div>
+            <label>Localisation :</label>
+            <input type="text" th:field="*{localisation}" />
+            <span class="field-error" th:errors="*{localisation}"></span>
+        </div>
+        <button type="submit">Enregistrer</button>
+    </form>
+</div>
+</body>
+</html>

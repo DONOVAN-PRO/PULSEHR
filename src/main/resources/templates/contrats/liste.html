@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrats Actifs — PulseHR</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+            color: #1a1a1a;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #0a0a0a;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 4px;
+            border: 1.5px solid #0a0a0a;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #0a0a0a;
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Alerte pour les contrats expirant bientôt (< 30 jours) */
+        .warn-expiring {
+            background-color: #fffbeb;
+            font-weight: bold;
+            color: #92400e;
+        }
+
+        .warn-expiring:hover {
+            background-color: #fef3c7 !important;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div th:replace="~{layout :: nav}"></div>
+</header>
+
+<div class="container">
+    <h2>Contrats Actifs</h2>
+    <table>
+        <thead>
+        <tr><th>Employé</th><th>Type</th><th>Début</th><th>Fin</th><th>Salaire</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${contrats}"
+            th:classappend="${c.dateFin != null and c.dateFin.isBefore(T(java.time.LocalDate).now().plusDays(30))} ? 'warn-expiring' : ''">
+            <td th:text="${c.nomEmploye}"></td>
+            <td th:text="${c.typeContrat}"></td>
+            <td th:text="${c.dateDebut}"></td>
+            <td th:text="${c.dateFin}"></td>
+            <td th:text="${c.salaireContrat}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

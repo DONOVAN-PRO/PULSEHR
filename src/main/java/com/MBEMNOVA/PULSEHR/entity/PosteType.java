@@ -1,0 +1,5 @@
+package com.MBEMNOVA.PULSEHR.entity;
+
+public enum PosteType {
+    DEVELOPPEUR, CHEF_PROJET, RH_SPECIALISTE, COMPTABLE, MANAGER, DIRECTEUR
+}
