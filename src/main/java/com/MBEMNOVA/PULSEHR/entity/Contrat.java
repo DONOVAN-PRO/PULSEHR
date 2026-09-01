@@ -34,8 +34,8 @@ public class Contrat {
     @Builder.Default
     private Boolean actif = true;
 
-    // --- Champ manquant causant l'erreur ---
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employe_id")
+    @ToString.Exclude
     private Employe employe;
 }

@@ -2,9 +2,12 @@ package com.MBEMNOVA.PULSEHR.service.impl;
 
 import com.MBEMNOVA.PULSEHR.dto.ContratDTO;
 import com.MBEMNOVA.PULSEHR.entity.Contrat;
+import com.MBEMNOVA.PULSEHR.entity.Employe;
+import com.MBEMNOVA.PULSEHR.entity.StatutContrat;
 import com.MBEMNOVA.PULSEHR.entity.TypeContrat;
 import com.MBEMNOVA.PULSEHR.exception.EntityNotFoundException;
 import com.MBEMNOVA.PULSEHR.repository.ContratRepository;
+import com.MBEMNOVA.PULSEHR.repository.EmployeRepository;
 import com.MBEMNOVA.PULSEHR.service.ContratService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.List;
 public class ContratServiceImpl implements ContratService {
 
     private final ContratRepository contratRepository;
+    private final EmployeRepository employeRepository; // <-- Injection obligatoire pour rattacher l'employé
 
     @Override
     @Transactional(readOnly = true)
@@ -55,9 +59,18 @@ public class ContratServiceImpl implements ContratService {
         Contrat contratExistant = contratRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Contrat introuvable avec l'ID : " + id));
 
-        // Conversion String (DTO) -> Enum (Entity)
         if (contratDTO.getTypeContrat() != null) {
             contratExistant.setTypeContrat(TypeContrat.valueOf(contratDTO.getTypeContrat().toUpperCase()));
+        }
+
+        if (contratDTO.getStatut() != null) {
+            contratExistant.setStatut(StatutContrat.valueOf(contratDTO.getStatut().toUpperCase()));
+        }
+
+        if (contratDTO.getEmployeId() != null) {
+            Employe employe = employeRepository.findById(contratDTO.getEmployeId())
+                    .orElseThrow(() -> new EntityNotFoundException("Employé introuvable avec l'ID : " + contratDTO.getEmployeId()));
+            contratExistant.setEmploye(employe);
         }
 
         contratExistant.setSalaire(contratDTO.getSalaire());
@@ -74,29 +87,38 @@ public class ContratServiceImpl implements ContratService {
         if (entity == null) return null;
         return ContratDTO.builder()
                 .id(entity.getId())
-                // Conversion Enum (Entity) -> String (DTO)
                 .typeContrat(entity.getTypeContrat() != null ? entity.getTypeContrat().name() : null)
+                .statut(entity.getStatut() != null ? entity.getStatut().name() : null)
                 .salaire(entity.getSalaire())
                 .dateDebut(entity.getDateDebut())
                 .dateFin(entity.getDateFin())
                 .dateSignature(entity.getDateSignature())
                 .estSigne(entity.getEstSigne())
                 .actif(entity.getActif())
+                .employeId(entity.getEmploye() != null ? entity.getEmploye().getId() : null) // <-- Récupération de l'ID employé
                 .build();
     }
 
     private Contrat toEntity(ContratDTO dto) {
         if (dto == null) return null;
+
+        Employe employe = null;
+        if (dto.getEmployeId() != null) {
+            employe = employeRepository.findById(dto.getEmployeId())
+                    .orElseThrow(() -> new EntityNotFoundException("Employé introuvable avec l'ID : " + dto.getEmployeId()));
+        }
+
         return Contrat.builder()
                 .id(dto.getId())
-                // Conversion String (DTO) -> Enum (Entity)
                 .typeContrat(dto.getTypeContrat() != null ? TypeContrat.valueOf(dto.getTypeContrat().toUpperCase()) : null)
+                .statut(dto.getStatut() != null ? StatutContrat.valueOf(dto.getStatut().toUpperCase()) : null)
                 .salaire(dto.getSalaire())
                 .dateDebut(dto.getDateDebut())
                 .dateFin(dto.getDateFin())
                 .dateSignature(dto.getDateSignature())
                 .estSigne(dto.getEstSigne() != null ? dto.getEstSigne() : false)
                 .actif(dto.getActif() != null ? dto.getActif() : true)
+                .employe(employe) // <-- Affectation de l'entité Employe
                 .build();
     }
 }
