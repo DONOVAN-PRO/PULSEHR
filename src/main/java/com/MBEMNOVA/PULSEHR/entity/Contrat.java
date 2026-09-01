@@ -17,7 +17,12 @@ public class Contrat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String typeContrat;
+    @Enumerated(EnumType.STRING)
+    private TypeContrat typeContrat; // Modifié de String -> TypeContrat
+
+    @Enumerated(EnumType.STRING)
+    private StatutContrat statut; // Ajouté pour correspondre au statut (ACTIF, EXPIRE, etc.)
+
     private Double salaire;
     private LocalDate dateDebut;
     private LocalDate dateFin;

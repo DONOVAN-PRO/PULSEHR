@@ -32,6 +32,7 @@ public class StatistiqueService {
         String deptMax = departementRepository.findDepartementAvecPlusDEmployes()
                 .orElse("Aucun");
 
+        // Récupération des contrats avec le statut ACTIF
         List<Contrat> contratsActifs = contratRepository.findByStatut(StatutContrat.ACTIF);
         long totalContratsActifs = contratsActifs.size();
 
@@ -42,7 +43,10 @@ public class StatistiqueService {
 
         Map<String, Long> repartition = new HashMap<>();
         for (TypeContrat tc : TypeContrat.values()) {
-            long count = contratsActifs.stream().filter(c -> c.getTypeContrat() == tc).count();
+            // Comparaison correcte d'Enum à Enum
+            long count = contratsActifs.stream()
+                    .filter(c -> c.getTypeContrat() == tc)
+                    .count();
             repartition.put(tc.name(), count);
         }
 
