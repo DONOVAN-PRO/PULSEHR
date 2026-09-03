@@ -1,43 +1,54 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Formulaire Département — PulseHR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            background: #f4f4f4;
-            color: #1a1a1a;
+        :root {
+            --ink: #182A24;
+            --paper: #F6F3EC;
+            --card: #FFFFFF;
+            --gold: #B8863B;
+            --line: #E1DCCC;
+            --text: #1C1C1A;
+            --text-muted: #736F5F;
+            --error: #A6402F;
         }
 
-        /* Header & Navigation */
-        header {
-            background: #0a0a0a;
-            width: 100%;
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: var(--paper);
+            color: var(--text);
         }
+
+        h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; }
 
         .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 4px;
-            border: 1.5px solid #0a0a0a;
+            max-width: 640px;
+            margin: 2.5rem auto;
+            background: var(--card);
+            padding: 2.25rem 2.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            box-shadow: 0 1px 2px rgba(24, 42, 36, 0.04);
         }
 
         h2 {
             margin-top: 0;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            margin-bottom: 1.75rem;
+            font-size: 1.6rem;
         }
 
-        /* Formulaires */
         form {
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
-            max-width: 600px;
+            gap: 1.4rem;
         }
 
         form div {
@@ -47,74 +58,91 @@
         }
 
         label {
-            font-weight: bold;
-            font-size: 0.95rem;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--text-muted);
         }
 
         input[type="text"],
         input[type="number"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
+            padding: 11px 12px;
+            border: 1px solid var(--line);
             border-radius: 4px;
             font-family: inherit;
             font-size: 0.95rem;
-            box-sizing: border-box;
+            color: var(--text);
+            background: var(--paper);
         }
 
         input:focus {
             outline: none;
-            border-color: #0a0a0a;
+            border-color: var(--gold);
+            background: var(--card);
         }
 
         button[type="submit"] {
-            background-color: #0a0a0a;
-            color: #ffffff;
+            background-color: var(--ink);
+            color: #FFFDF8;
             border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: bold;
+            padding: 12px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
             border-radius: 4px;
             cursor: pointer;
             align-self: flex-start;
-            margin-top: 1rem;
-            transition: background-color 0.2s ease;
+            margin-top: 0.4rem;
+            border-bottom: 2px solid var(--gold);
+            transition: background-color 0.15s ease;
         }
 
         button[type="submit"]:hover {
-            background-color: #333333;
+            background-color: #24382F;
         }
 
-        /* Messages d'erreur de validation */
         .field-error {
-            color: #b91c1c;
+            color: var(--error);
             font-size: 0.85em;
             display: block;
-            margin-top: 0.2rem;
+            margin-top: 0.15rem;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                margin: 1.25rem;
+                padding: 1.5rem 1.25rem;
+            }
+
+            h2 { font-size: 1.35rem; }
+
+            button[type="submit"] {
+                width: 100%;
+                align-self: stretch;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-<header>
-    <div th:replace="~{layout :: nav}"></div>
-</header>
+<div th:replace="~{layout :: nav}"></div>
 
 <div class="container">
-    <h2>Créer / Modifier un Département</h2>
+    <h2>Créer / modifier un département</h2>
     <form th:action="@{/departements}" th:object="${departement}" method="post">
         <input type="hidden" th:field="*{id}" />
         <div>
-            <label>Nom :</label>
+            <label>Nom</label>
             <input type="text" th:field="*{nom}" />
             <span class="field-error" th:errors="*{nom}"></span>
         </div>
         <div>
-            <label>Budget Annuel :</label>
+            <label>Budget annuel</label>
             <input type="number" step="0.01" th:field="*{budgetAnnuel}" />
             <span class="field-error" th:errors="*{budgetAnnuel}"></span>
         </div>
         <div>
-            <label>Localisation :</label>
+            <label>Localisation</label>
             <input type="text" th:field="*{localisation}" />
             <span class="field-error" th:errors="*{localisation}"></span>
         </div>

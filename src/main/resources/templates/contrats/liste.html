@@ -1,93 +1,131 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Contrats Actifs — PulseHR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            background: #f4f4f4;
-            color: #1a1a1a;
+        :root {
+            --ink: #182A24;
+            --paper: #F6F3EC;
+            --card: #FFFFFF;
+            --gold: #B8863B;
+            --line: #E1DCCC;
+            --text: #1C1C1A;
+            --text-muted: #736F5F;
+            --warn: #92620E;
+            --warn-bg: #FCF3DF;
+            --warn-bg-hover: #F9E7C0;
         }
 
-        /* Header & Navigation */
-        header {
-            background: #0a0a0a;
-            width: 100%;
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: var(--paper);
+            color: var(--text);
         }
+
+        h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; }
 
         .container {
             max-width: 1000px;
-            margin: 2rem auto;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 4px;
-            border: 1.5px solid #0a0a0a;
+            margin: 2.5rem auto;
+            background: var(--card);
+            padding: 2.25rem 2.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            box-shadow: 0 1px 2px rgba(24, 42, 36, 0.04);
         }
 
         h2 {
             margin-top: 0;
             margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
         }
 
-        /* Tableaux */
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
 
         th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--line);
             text-align: left;
         }
 
         th {
-            background: #0a0a0a;
-            color: white;
+            background: var(--ink);
+            color: #FFFDF8;
+            font-weight: 500;
+            font-size: 0.88rem;
+            border-bottom: 2px solid var(--gold);
         }
 
         tbody tr:hover {
-            background-color: #f9f9f9;
+            background-color: #FAF8F2;
         }
 
         /* Alerte pour les contrats expirant bientôt (< 30 jours) */
         .warn-expiring {
-            background-color: #fffbeb;
-            font-weight: bold;
-            color: #92400e;
+            background-color: var(--warn-bg);
+            font-weight: 600;
+            color: var(--warn);
         }
 
         .warn-expiring:hover {
-            background-color: #fef3c7 !important;
+            background-color: var(--warn-bg-hover) !important;
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                margin: 1.25rem;
+                padding: 1.5rem 1.25rem;
+            }
+
+            h2 { font-size: 1.35rem; }
+
+            table { min-width: 560px; }
+
+            th, td {
+                padding: 9px 8px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-<header>
-    <div th:replace="~{layout :: nav}"></div>
-</header>
+<div th:replace="~{layout :: nav}"></div>
 
 <div class="container">
-    <h2>Contrats Actifs</h2>
-    <table>
-        <thead>
-        <tr><th>Employé</th><th>Type</th><th>Début</th><th>Fin</th><th>Salaire</th></tr>
-        </thead>
-        <tbody>
-        <tr th:each="c : ${contrats}"
-            th:classappend="${c.dateFin != null and c.dateFin.isBefore(T(java.time.LocalDate).now().plusDays(30))} ? 'warn-expiring' : ''">
-            <td th:text="${c.nomEmploye}"></td>
-            <td th:text="${c.typeContrat}"></td>
-            <td th:text="${c.dateDebut}"></td>
-            <td th:text="${c.dateFin}"></td>
-            <td th:text="${c.salaireContrat}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <h2>Contrats actifs</h2>
+    <div class="table-scroll">
+        <table>
+            <thead>
+            <tr><th>Employé</th><th>Type</th><th>Début</th><th>Fin</th><th>Salaire</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${contrats}"
+                th:classappend="${c.dateFin != null and c.dateFin.isBefore(T(java.time.LocalDate).now().plusDays(30))} ? 'warn-expiring' : ''">
+                <td th:text="${c.nomEmploye}"></td>
+                <td th:text="${c.typeContrat}"></td>
+                <td th:text="${c.dateDebut}"></td>
+                <td th:text="${c.dateFin}"></td>
+                <td th:text="${c.salaireContrat}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

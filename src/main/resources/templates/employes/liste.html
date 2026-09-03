@@ -1,129 +1,54 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Employés — PulseHR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            background: #f4f4f4;
-            color: #1a1a1a;
+        :root {
+            --ink: #182A24;
+            --paper: #F6F3EC;
+            --card: #FFFFFF;
+            --gold: #B8863B;
+            --line: #E1DCCC;
+            --text: #1C1C1A;
+            --text-muted: #736F5F;
         }
-
-        /* Header & Navigation */
-        header {
-            background: #0a0a0a;
-            width: 100%;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 4px;
-            border: 1.5px solid #0a0a0a;
-        }
-
-        h2 {
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        /* Bouton Action d'ajout */
-        .btn-add {
-            display: inline-block;
-            background-color: #0a0a0a;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 8px 16px;
-            font-weight: bold;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            transition: background-color 0.2s ease;
-        }
-
-        .btn-add:hover {
-            background-color: #333333;
-        }
-
-        /* Formulaire de filtrage en ligne */
-        .filter-form {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            background: #fafafa;
-            padding: 12px;
-            border: 1px solid #e5e5e5;
-            border-radius: 4px;
-        }
-
-        .filter-form input[type="text"],
-        .filter-form select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .filter-form input[type="text"] {
-            flex: 2;
-        }
-
-        .filter-form select {
-            flex: 1;
-        }
-
-        .filter-form button {
-            background-color: #0a0a0a;
-            color: #ffffff;
-            border: none;
-            padding: 8px 16px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .filter-form button:hover {
-            background-color: #333333;
-        }
-
-        /* Tableaux */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background: #0a0a0a;
-            color: white;
-        }
-
-        tbody tr:hover {
-            background-color: #f9f9f9;
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; background: var(--paper); color: var(--text); }
+        h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; margin-top: 0; margin-bottom: 1.5rem; font-size: 1.6rem; }
+        .container { max-width: 1000px; margin: 2.5rem auto; background: var(--card); padding: 2.25rem 2.5rem; border-radius: 6px; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(24, 42, 36, 0.04); }
+        .btn-add { display: inline-block; background-color: var(--ink); color: #FFFDF8; text-decoration: none; padding: 10px 18px; font-weight: 600; font-size: 0.9rem; border-radius: 4px; border-bottom: 2px solid var(--gold); margin-bottom: 1.5rem; transition: background-color 0.15s ease; }
+        .btn-add:hover { background-color: #24382F; }
+        .filter-form { display: flex; gap: 10px; align-items: center; margin-bottom: 1.75rem; background: var(--paper); padding: 14px; border: 1px solid var(--line); border-radius: 4px; flex-wrap: wrap; }
+        .filter-form input[type="text"], .filter-form select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 4px; font-size: 0.9rem; font-family: inherit; background: var(--card); color: var(--text); }
+        .filter-form input[type="text"]:focus, .filter-form select:focus { outline: none; border-color: var(--gold); }
+        .filter-form input[type="text"] { flex: 2; min-width: 160px; }
+        .filter-form select { flex: 1; min-width: 140px; }
+        .filter-form button { background-color: var(--ink); color: #FFFDF8; border: none; padding: 9px 18px; font-weight: 600; font-size: 0.9rem; border-radius: 4px; cursor: pointer; border-bottom: 2px solid var(--gold); transition: background-color 0.15s ease; }
+        .filter-form button:hover { background-color: #24382F; }
+        .table-scroll { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+        th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+        th { background: var(--ink); color: #FFFDF8; font-weight: 500; font-size: 0.88rem; border-bottom: 2px solid var(--gold); }
+        tbody tr:hover { background-color: #FAF8F2; }
+        @media (max-width: 720px) {
+            .container { margin: 1.25rem; padding: 1.5rem 1.25rem; }
+            h2 { font-size: 1.35rem; }
+            .filter-form { flex-direction: column; align-items: stretch; }
+            .filter-form input[type="text"], .filter-form select, .filter-form button { width: 100%; }
+            table { min-width: 620px; }
+            th, td { padding: 9px 8px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-<header>
-    <div th:replace="~{layout :: nav}"></div>
-</header>
-
+<div th:replace="~{layout :: nav}"></div>
 <div class="container">
-    <h2>Liste des Employés</h2>
-    <a th:href="@{/employes/nouveau}" class="btn-add">+ Créer un Employé</a>
-
+    <h2>Liste des employés</h2>
+    <a th:href="@{/employes/nouveau}" class="btn-add">+ Créer un employé</a>
     <form th:action="@{/employes}" method="get" class="filter-form">
         <input type="text" name="nom" placeholder="Recherche par nom..." />
         <select name="deptId">
@@ -132,22 +57,23 @@
         </select>
         <button type="submit">Filtrer</button>
     </form>
-
-    <table th:if="${!#lists.isEmpty(employes)}">
-        <thead>
-        <tr><th>Nom</th><th>Prénom</th><th>Email</th><th>Poste</th><th>Département</th><th>Statut Contrat</th></tr>
-        </thead>
-        <tbody>
-        <tr th:each="e : ${employes}">
-            <td th:text="${e.nom}"></td>
-            <td th:text="${e.prenom}"></td>
-            <td th:text="${e.email}"></td>
-            <td th:text="${e.poste}"></td>
-            <td th:text="${e.nomDepartement}"></td>
-            <td th:text="${e.statutContratActif}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-scroll">
+        <table th:if="${!#lists.isEmpty(employes)}">
+            <thead>
+            <tr><th>Nom</th><th>Prénom</th><th>Email</th><th>Poste</th><th>Département</th><th>Statut contrat</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${employes}">
+                <td th:text="${e.nom}"></td>
+                <td th:text="${e.prenom}"></td>
+                <td th:text="${e.email}"></td>
+                <td th:text="${e.poste}"></td>
+                <td th:text="${e.nomDepartement}"></td>
+                <td th:text="${e.statutContratActif}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

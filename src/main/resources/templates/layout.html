@@ -1,49 +1,107 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>PulseHR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            background: #f4f4f4;
-            color: #1a1a1a;
+        :root {
+            --ink: #182A24;
+            --ink-soft: #24382F;
+            --paper: #F6F3EC;
+            --card: #FFFFFF;
+            --gold: #B8863B;
+            --gold-soft: #E7D3AE;
+            --teal: #3C6E63;
+            --line: #E1DCCC;
+            --text: #1C1C1A;
+            --text-muted: #736F5F;
+            --error: #A6402F;
+            --error-bg: #FBF1EE;
+            --warn: #92620E;
+            --warn-bg: #FCF3DF;
         }
 
-        header {
-            background: #0a0a0a;
-            width: 100%;
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: var(--paper);
+            color: var(--text);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        header.app-header {
+            background: var(--ink);
         }
 
         nav {
-            background: #0a0a0a;
-            padding: 1rem 2rem;
+            padding: 1.1rem 2rem;
             display: flex;
-            gap: 20px;
+            gap: 2.5rem;
             align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
-        nav a {
-            color: #fff;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #FFFDF8;
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
             text-decoration: none;
-            font-weight: bold;
-            padding: 0.5rem 0.75rem;
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
+            margin-right: auto;
         }
 
-        nav a:hover {
-            background-color: rgba(255, 255, 255, 0.15);
+        .brand svg { display: block; }
+
+        .nav-links {
+            display: flex;
+            gap: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        nav a.nav-link {
+            color: #D9D4C4;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+            padding-bottom: 3px;
+            border-bottom: 1.5px solid transparent;
+            transition: color 0.15s ease, border-color 0.15s ease;
+        }
+
+        nav a.nav-link:hover {
+            color: #FFFDF8;
+            border-bottom-color: var(--gold);
+        }
+
+        .pulse-line {
+            display: block;
+            width: 100%;
+            height: 18px;
         }
 
         .container {
             max-width: 1000px;
-            margin: 2rem auto;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 4px;
-            border: 1.5px solid #0a0a0a;
+            margin: 2.5rem auto;
+            background: var(--card);
+            padding: 2.25rem 2.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            box-shadow: 0 1px 2px rgba(24, 42, 36, 0.04);
         }
 
         table {
@@ -53,47 +111,111 @@
         }
 
         th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--line);
             text-align: left;
         }
 
         th {
-            background: #0a0a0a;
-            color: white;
+            background: var(--ink);
+            color: #FFFDF8;
+            font-weight: 500;
+            font-size: 0.88rem;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        tbody tr:hover {
+            background-color: #FAF8F2;
         }
 
         .alert {
-            padding: 10px;
-            background: #fef2f2;
-            border-left: 4px solid #b91c1c;
-            color: #b91c1c;
-            margin-bottom: 1rem;
+            padding: 12px 14px;
+            background: var(--error-bg);
+            border-left: 3px solid var(--error);
+            color: var(--error);
+            margin-bottom: 1.25rem;
+            border-radius: 0 4px 4px 0;
         }
 
         .warn-expiring {
-            background: #fffbeb;
-            font-weight: bold;
-            color: #92400e;
+            background: var(--warn-bg);
+            font-weight: 600;
+            color: var(--warn);
         }
 
         .field-error {
-            color: #b91c1c;
+            color: var(--error);
             font-size: 0.85em;
             display: block;
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 720px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+                padding: 1rem 1.25rem;
+            }
+
+            .brand {
+                margin-right: 0;
+                width: 100%;
+            }
+
+            .nav-links {
+                gap: 1rem 1.25rem;
+                width: 100%;
+            }
+
+            nav a.nav-link {
+                font-size: 0.88rem;
+            }
+
+            .container {
+                margin: 1.25rem;
+                padding: 1.5rem 1.25rem;
+            }
+
+            th, td {
+                padding: 9px 8px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 0.6rem;
+            }
         }
     </style>
 </head>
 <body>
-<header th:fragment="nav">
+<header class="app-header" th:fragment="nav">
     <nav>
-        <a th:href="@{/}">Tableau de Bord</a>
-        <a th:href="@{/departements}">Départements</a>
-        <a th:href="@{/employes}">Employés</a>
-        <a th:href="@{/contrats}">Contrats</a>
-        <a th:href="@{/evaluations/nouveau}">Nouvelle Évaluation</a>
-        <a th:href="@{/swagger-ui.html}" target="_blank">API Swagger</a>
+        <a th:href="@{/}" class="brand">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M2 12h4l2-7 4 14 3-10 2 3h5" stroke="#B8863B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            PulseHR
+        </a>
+        <div class="nav-links">
+            <a th:href="@{/}" class="nav-link">Tableau de bord</a>
+            <a th:href="@{/departements}" class="nav-link">Départements</a>
+            <a th:href="@{/employes}" class="nav-link">Employés</a>
+            <a th:href="@{/contrats}" class="nav-link">Contrats</a>
+            <a th:href="@{/evaluations/nouveau}" class="nav-link">Nouvelle évaluation</a>
+            <a th:href="@{/swagger-ui.html}" class="nav-link" target="_blank">API Swagger</a>
+        </div>
     </nav>
+    <svg class="pulse-line" viewBox="0 0 400 18" preserveAspectRatio="none">
+        <line x1="0" y1="9" x2="400" y2="9" stroke="#24382F" stroke-width="1"/>
+        <path d="M0,9 L150,9 L162,1 L174,17 L186,9 L400,9" fill="none" stroke="#B8863B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
 </header>
 </body>
 </html>
