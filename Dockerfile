@@ -22,4 +22,6 @@ EXPOSE ${PORT}
 COPY --from=builder /app/target/*.jar app.jar
 
 # Lancement de l'application Spring Boot
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-jar", "app.jar"]
+# Forme shell (sh -c) obligatoire ici : la forme exec ["java", ...] ne
+# substitue JAMAIS les variables d'environnement comme ${PORT}.
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT} -jar app.jar"]
