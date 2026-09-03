@@ -60,11 +60,11 @@ public class ContratServiceImpl implements ContratService {
                 .orElseThrow(() -> new EntityNotFoundException("Contrat introuvable avec l'ID : " + id));
 
         if (contratDTO.getTypeContrat() != null) {
-            contratExistant.setTypeContrat(TypeContrat.valueOf(contratDTO.getTypeContrat().toUpperCase()));
+            contratExistant.setTypeContrat(contratDTO.getTypeContrat());
         }
 
         if (contratDTO.getStatut() != null) {
-            contratExistant.setStatut(StatutContrat.valueOf(contratDTO.getStatut().toUpperCase()));
+            contratExistant.setStatut(contratDTO.getStatut());
         }
 
         if (contratDTO.getEmployeId() != null) {
@@ -87,8 +87,8 @@ public class ContratServiceImpl implements ContratService {
         if (entity == null) return null;
         return ContratDTO.builder()
                 .id(entity.getId())
-                .typeContrat(entity.getTypeContrat() != null ? entity.getTypeContrat().name() : null)
-                .statut(entity.getStatut() != null ? entity.getStatut().name() : null)
+                .typeContrat(entity.getTypeContrat())
+                .statut(entity.getStatut())
                 .salaire(entity.getSalaire())
                 .dateDebut(entity.getDateDebut())
                 .dateFin(entity.getDateFin())
@@ -110,8 +110,8 @@ public class ContratServiceImpl implements ContratService {
 
         return Contrat.builder()
                 .id(dto.getId())
-                .typeContrat(dto.getTypeContrat() != null ? TypeContrat.valueOf(dto.getTypeContrat().toUpperCase()) : null)
-                .statut(dto.getStatut() != null ? StatutContrat.valueOf(dto.getStatut().toUpperCase()) : null)
+                .typeContrat(dto.getTypeContrat())
+                .statut(dto.getStatut())
                 .salaire(dto.getSalaire())
                 .dateDebut(dto.getDateDebut())
                 .dateFin(dto.getDateFin())
